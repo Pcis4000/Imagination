@@ -1,0 +1,53 @@
+###########################################################################################
+#####
+#####   Name: local.yml
+#####   
+#####   Description:
+#####
+#####   Installs required packages for ansible and makes ure the server is upto date 
+#####   before running Jenkins install
+#####
+#####   Author
+#####   Paul Silverwood (Version 1.0)
+#####   
+#####
+###########################################################################################
+
+
+
+
+- name: Connection Test
+  ping:
+  remote_user: ubuntu
+  register: connection_test
+  
+- debug:
+    var: connection_test
+
+- name: Add Jenkins Key
+  shell: "wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -"
+  become: true
+  changed_when: False
+  retries: 3
+  delay: 3
+  register: result
+  until: result is not failed
+    
+- name: Add Jenkins apt repository
+  apt_repository: 
+    repo: 'deb http://pkg.jenkins.io/debian-stable binary/' 
+    state: present 
+  become: true
+
+- name: Install openjdk-8-jdk and update cache
+  apt:
+    name: openjdk-8-jdk
+    update_cache: yes
+  become: true
+
+- name: Install jenkins
+  apt:
+    name: jenkins
+  become: true
+    
+    

@@ -1,0 +1,48 @@
+###########################################################################################
+#####
+#####   Name: main.yml
+#####   
+#####   Description
+#####
+#####   Main Ansible Script for Deploying An EC2 Instance With A boilerplate Flask
+#####
+#####   Author
+#####   Paul Silverwood (Version 1.0)
+#####   
+#####
+###########################################################################################
+
+- name: Main.yml V1.0
+  hosts: remote
+  gather_facts: false
+  remote_user: ubuntu
+  
+  pre_tasks:
+    - name: Install python for Ansible
+      become: true
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+      changed_when: False
+      retries: 3
+      delay: 3
+      register: result
+      until: result is not failed
+      
+  tasks:
+  - name: Update all packages to the latest version
+    apt:
+      upgrade: dist
+    become: true
+    
+  - name: Remove useless packages from the cache
+    apt:
+      autoclean: yes
+    become: true
+
+  - name: Remove dependencies that are no longer required
+    apt:
+      autoremove: yes
+    become: true  
+
+  - include_role:
+      name: jenkins
+
