@@ -1,0 +1,47 @@
+###########################################################################################
+#####
+#####   Name:  roles/flask/tasks/main.yml
+#####   
+#####   Description:
+#####
+#####   Pulls the boilerplate git files so static can be copied to the correct place
+#####
+#####   Author
+#####   Paul Silverwood (Version 1.0)
+#####   
+#####
+###########################################################################################
+
+
+- name: Pull from git
+  git:
+    repo: 'https://github.com/realpython/flask-boilerplate.git'
+    dest: /var/lib/jenkins/workspace/Flask
+  become: true
+  
+- name: Creates directory for the static files
+  file:
+    path: /var/www/html/static
+    state: directory
+  become: true
+  
+#- name: Copies the static files for the Flask app to /var/www/html which is where nginx will look to serve them on request
+#  copy:
+#    src: "/var/lib/jenkins/workspace/Flask/static/*"
+#    dest: "/var/www/html/static/"
+#    remote_src: true
+#    directory_mode: true
+#  become: true
+
+- name: Copies the static files for the Flask app to /var/www/html which is where nginx will look to serve them on request
+  command: "cp -R /var/lib/jenkins/workspace/Flask/static /var/www/html"
+  become: true
+  
+  
+- name: Set correct ownership for Jenkins
+  file: 
+    dest=/var/lib/jenkins/workspace/
+    owner=jenkins 
+    group=jenkins
+    recurse=yes
+  become: true

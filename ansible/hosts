@@ -1,2 +1,2 @@
 [remote]
-ec2_instanace ansible_ssh_host=35.178.178.68
+ec2_instanace ansible_ssh_host=3.8.232.117

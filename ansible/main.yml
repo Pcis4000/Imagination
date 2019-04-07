@@ -33,7 +33,7 @@
       upgrade: dist
     become: true
     
-  - name: Remove useless packages from the cache
+  - name: Remove unneeded packages from the cache
     apt:
       autoclean: yes
     become: true
@@ -42,7 +42,20 @@
     apt:
       autoremove: yes
     become: true  
+    
+  - name: Install other required packages and update cache
+    apt:
+      name: ["virtualenv", "python-pip"]
+      update_cache: yes
+    become: true
 
   - include_role:
       name: jenkins
+
+  - include_role:
+      name: flask
+
+  - include_role:
+      name: nginx
+
 

@@ -1,11 +1,10 @@
 ###########################################################################################
 #####
-#####   Name: local.yml
+#####   Name:  roles/jenkins/tasks/main.yml
 #####   
 #####   Description:
 #####
-#####   Installs required packages for ansible and makes ure the server is upto date 
-#####   before running Jenkins install
+#####   Installs Jenkins and any requirements
 #####
 #####   Author
 #####   Paul Silverwood (Version 1.0)
@@ -49,5 +48,4 @@
   apt:
     name: jenkins
   become: true
-    
     
